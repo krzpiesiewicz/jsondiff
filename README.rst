@@ -6,18 +6,18 @@ Diff JSON and JSON-like structures in Python.
 Installation
 ------------
 
-``pip install jsondiff``
+``pip install git+https://github.com/krzpiesiewicz/jsondiff.git``
 
 Quickstart
 ----------
 
 .. code-block:: python
 
-    >>> import jsondiff as jd
-    >>> from jsondiff import diff
+    >>> from jsondiff
+    >>> import diff
 
     >>> diff({'a': 1, 'b': 2}, {'b': 3, 'c': 4})
-    {'c': 4, 'b': 3, delete: ['a']}
+    {'b': '2 -> 3', 'c': 4, delete: ['a']}
 
     >>> diff(['a', 'b', 'c'], ['a', 'b', 'c', 'd'])
     {insert: [(3, 'd')]}
@@ -27,7 +27,7 @@ Quickstart
 
     # Typical diff looks like what you'd expect...
     >>> diff({'a': [0, {'b': 4}, 1]}, {'a': [0, {'b': 5}, 1]})
-    {'a': {1: {'b': 5}}}
+    {'a': {1: {'b': '4 -> 5'}}}
 
     # ...but similarity is taken into account
     >>> diff({'a': [0, {'b': 4}, 1]}, {'a': [0, {'c': 5}, 1]})
@@ -35,18 +35,18 @@ Quickstart
 
     # Support for various diff syntaxes
     >>> diff({'a': 1, 'b': 2}, {'b': 3, 'c': 4}, syntax='explicit')
-    {insert: {'c': 4}, update: {'b': 3}, delete: ['a']}
+    {insert: {'c': 4}, update: {'b': '2 -> 3'}, delete: ['a']}
 
     >>> diff({'a': 1, 'b': 2}, {'b': 3, 'c': 4}, syntax='symmetric')
-    {insert: {'c': 4}, 'b': [2, 3], delete: {'a': 1}}
+    {'b': [2, 3], insert: {'c': 4}, delete: {'a': 1}}
 
     # Special handling of sets
     >>> diff({'a', 'b', 'c'}, {'a', 'c', 'd'})
-    {discard: set(['b']), add: set(['d'])}
+    {discard: {'b'}, add: {'d'}}
 
     # Load and dump JSON
-    >>> print diff('["a", "b", "c"]', '["a", "c", "d"]', load=True, dump=True)
-    {"$delete": [1], "$insert": [[2, "d"]]}
+    >>> print(diff('["a", "b", "c"]', '["a", "c", "d"]', load=True, dump=True))
+    {"$insert": [[2, "d"]], "$delete": [1]}
 
     # NOTE: Default keys in the result are objects, not strings!
     >>> d = diff({'a': 1, 'delete': 2}, {'b': 3, 'delete': 4})

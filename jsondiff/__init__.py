@@ -109,7 +109,7 @@ class CompactJsonDiffSyntax(object):
         if s == 1.0:
             return {}
         else:
-            return {replace: b} if isinstance(b, dict) else b
+            return {replace: b} if isinstance(b, dict) else f"{a} -> {b}"
 
     def patch(self, a, d):
         if isinstance(d, dict):
@@ -202,7 +202,7 @@ class ExplicitJsonDiffSyntax(object):
         if s == 1.0:
             return {}
         else:
-            return b
+            return f"{a} -> {b}"
 
 
 class SymmetricJsonDiffSyntax(object):
